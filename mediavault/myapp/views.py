@@ -1,6 +1,10 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib.auth.models import auth,User
+from django.templatetags.static import static
+from .models import Image
+from .forms import ImageForm
+
 
 # Create your views here.
 def index(request):
@@ -36,11 +40,19 @@ def logout(request):
     if '_auth_user_id' in request.session:
         auth.logout(request)
         return redirect(index)
+def gallery_view(request):
+    images = Image.objects.all()
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('gallery_view')
+    else:
+        form = ImageForm()
 
-def upload_file(request):  
-    if request.method == 'POST':  
-        filename=request.FILES['file']
-        data=files.objects.create(file=filename)
-        data.save()
-        return redirect(upload_file)
-    return render(request,'home.html')
+    return render(request, 'home.html', {'form': form, 'images': images})
+
+def delete_image(request, image_id):
+    image = Image.objects.get(id=image_id)
+    image.delete()
+    return redirect('gallery_view')

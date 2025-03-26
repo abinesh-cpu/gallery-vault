@@ -1,41 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
+    <!-- {% load static %} -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEDIA</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <style>
-        body{
-            color: red;
-            background-color: rgb(179, 179, 205);
-            background-size: cover;
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
-        }
-        .main{
-            height: 400px;
-            width: 400px;
-            display: flex;
-            justify-content: space-evenly;
-            align-items: center;
-            background: linear-gradient(to bottom, #0a8f6c, #8d64b1);
-            margin: 5px;
-            border: 2px solid black;
-        }
-    </style>
+    <title>Gallery Vault</title>
+    <!-- <link rel="stylesheet" href="{% static 'style.css' %}"> -->
+   <style>
+    /* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    text-align: center;
+    padding: 20px;
+    margin: 0;
+}
+
+h1 {
+    color: #333;
+}
+
+/* Upload Form */
+.upload-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+/* Gallery Grid */
+.gallery-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.gallery-item {
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    text-align: center;
+    position: relative;
+}
+
+.gallery-item img {
+    width: 100%;
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.gallery-item img:hover {
+    transform: scale(1.05);
+}
+
+/* Delete Button */
+.delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: red;
+    color: white;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 12px;
+    transition: background 0.2s;
+}
+
+.delete-btn:hover {
+    background: darkred;
+}
+
+/* No Images Message */
+.no-images {
+    color: #777;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+   </style>
 </head>
 <body>
-    
-    <div class="main">
-        <form action="../upload_file" method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file" name="file" id="">
-            <input type="submit" value="Upload">
-        </form>
-        <a href="../logout">logout</a>
+
+    <h1>Gallery Vault</h1>
+
+    <!-- Upload Form -->
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="image-upload">Select an Image:</label>
+        <input type="file" name="image" id="image-upload" accept="image/*" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <hr>
+
+    <!-- Display Uploaded Images -->
+    <h2>Uploaded Images</h2>
+    <div>
+        {% for image in images %}
+            <div style="display: inline-block; text-align: center; margin: 10px;">
+                <img src="image.image.url" width="150" alt="{{ image.title }}"><br>
+                <a href="../delete_image">Delete</a>
+            </div>
+        {% empty %}
+            <p>No images uploaded yet.</p>
+        {% endfor %}
     </div>
 </body>
 </html>

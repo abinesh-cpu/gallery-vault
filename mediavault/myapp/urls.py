@@ -5,6 +5,7 @@ urlpatterns=[
     path('',views.index),
     path('home',views.home),
     path('register',views.register),
-    path('upload_file',views.upload_file),
-    path('logout',views.logout)
+    path('logout',views.logout),
+    path('gallery_view', views.gallery_view),
+    path('delete/<int:image_id>/', views.delete_image),
 ]
